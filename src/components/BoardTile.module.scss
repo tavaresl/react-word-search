@@ -10,8 +10,10 @@
   flex-grow: 1;
   flex-shrink: 1;
   user-select: none;
+  will-change: font-size;
+  transition: font-size .3s;
 
-  &--Selected {
-    color: #ccc;
+  &:hover{
+    font-size: 2.4em;
   }
 }

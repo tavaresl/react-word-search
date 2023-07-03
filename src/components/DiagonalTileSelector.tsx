@@ -1,13 +1,16 @@
-import {BoardTileSelectorProps} from "@/app/components/BoardTileSelector";
+import {BoardTileSelectorProps} from "@/components/BoardTileSelector";
 import {CSSProperties} from "react";
 import {PuzzleTile} from "@/models/Puzzle";
 import {Property} from "csstype";
+import styles from "@/components/BoardTileSelector.module.scss";
 
-export default function DiagonalTileSelector({ firstTile, lastTile, puzzle }: BoardTileSelectorProps) {
+export default function DiagonalTileSelector({ firstTile, lastTile, puzzle, color }: BoardTileSelectorProps) {
   const puzzleSide = puzzle.width > puzzle.height ? puzzle.height : puzzle.width;
   const side = Math.abs(lastTile.x - firstTile.x);
   const rotation = getRotationDeg(firstTile, lastTile);
   const style: CSSProperties = {
+    borderColor: color,
+    backgroundColor: color,
     left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}%)`,
     top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}%)`,
     width: `${Math.sqrt(2) * (100 * Math.abs(side) / puzzleSide)}%`,
@@ -17,7 +20,7 @@ export default function DiagonalTileSelector({ firstTile, lastTile, puzzle }: Bo
   };
 
   return (
-    <div className="Board__TileSelector" style={style} />
+    <div className={styles.Board__TileSelector} style={style} />
   )
 }
 

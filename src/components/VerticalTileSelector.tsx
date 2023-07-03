@@ -1,11 +1,14 @@
 import Puzzle, {PuzzleTile} from "@/models/Puzzle";
 import {CSSProperties} from "react";
-import {BoardTileSelectorProps} from "@/app/components/BoardTileSelector";
+import {BoardTileSelectorProps} from "@/components/BoardTileSelector";
+import styles from "@/components/BoardTileSelector.module.scss";
 
-export default function VerticalTileSelector({ firstTile, lastTile, puzzle }: BoardTileSelectorProps) {
+export default function VerticalTileSelector({ firstTile, lastTile, puzzle, color }: BoardTileSelectorProps) {
   const dy = lastTile.y - firstTile.y;
   const sign = dy > 0 ? '-' : '+';
   const style: CSSProperties = {
+    borderColor: color,
+    backgroundColor: color,
     left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% ${sign} 30px)`,
     top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% ${sign} 30px)`,
     width: '1px',
@@ -14,6 +17,6 @@ export default function VerticalTileSelector({ firstTile, lastTile, puzzle }: Bo
   };
 
   return (
-    <div className="Board__TileSelector" style={style} />
+    <div className={styles.Board__TileSelector} style={style} />
   );
 }

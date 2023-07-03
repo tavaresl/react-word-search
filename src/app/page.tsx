@@ -1,12 +1,8 @@
 "use client";
-
-import Image from 'next/image'
-import Board from "@/app/components/Board";
-import BoardTile from "@/app/components/BoardTile";
+import Board from "@/components/Board";
 import Puzzle from "@/models/Puzzle";
 
 export default function Home() {
-  const letters = ['l', 'u', 'c', 'a', 's'];
   const puzzle: Puzzle = {
     theme: 'Xmas',
     width: 5,

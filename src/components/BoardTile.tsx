@@ -1,4 +1,4 @@
-import './BoardTile.scss'
+import styles from './BoardTile.module.scss'
 import React, { DetailedHTMLProps, HTMLAttributes, MouseEvent, MouseEventHandler, useState} from "react";
 
 type BoardTileProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
@@ -14,7 +14,7 @@ export default function BoardTile({ selected, selectable, children, ...props }: 
     return (
       <div
         { ...props }
-        className={ classes }>
+        className={ styles.Board__Tile }>
         { children }
       </div>
     );

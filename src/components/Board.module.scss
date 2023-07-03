@@ -5,7 +5,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  //gap: var(--gap);
+  cursor: pointer;
   
   @media (min-width: 480px) {
     margin: 0 auto;

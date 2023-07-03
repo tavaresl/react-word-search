@@ -1,17 +1,21 @@
-import './Board.scss'
-import BoardTile from "@/app/components/BoardTile";
+import styles from './Board.module.scss'
+import BoardTile from "@/components/BoardTile";
 import Puzzle, {PuzzleAnswer, PuzzleTile} from "@/models/Puzzle";
 import {CSSProperties, useState} from "react";
-import BoardTileSelector from "@/app/components/BoardTileSelector";
+import BoardTileSelector, {HexadecimalColor} from "@/components/BoardTileSelector";
 
 export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const [isSelecting, setSelecting] = useState<boolean>(false);
   const [selectedTiles, setSelectedTiles] = useState<PuzzleTile[]>([]);
-  const [foundWords, setFoundWords] = useState<PuzzleAnswer[]>([]);
+  const [answersFound, setAnswersFound] = useState<PuzzleAnswer[]>([]);
+  const [colors, setColors] = useState<HexadecimalColor[]>([
+    '#DBEBB7', '#C3EAEB', '#EADBAB', '#E6A9EB', '#EBB5A0',
+  ]);
+  const [usedColors, setUsedColors] = useState<HexadecimalColor[]>([]);
 
   const tileStyle: CSSProperties = { flexBasis: `calc(${100 / puzzle.width}% - var(--gap))` };
   const tiles = getSortedTiles(puzzle);
-
+  const color = colors[0] as HexadecimalColor;
   const startSelecting = (initialTile: PuzzleTile) => {
     if (!isSelecting) {
       setSelectedTiles([initialTile]);
@@ -34,6 +38,24 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   };
 
   const stopSelecting = () => {
+    const selectedWord = selectedTiles.map(t => t.letter).join('');
+    const matchedAnswer = puzzle.answers.find(a => a.word === selectedWord);
+
+    if (matchedAnswer && !answersFound.includes(matchedAnswer)) {
+      for (let i = 0; i < selectedTiles.length; i++) {
+        const xMatch = selectedTiles[i].x === matchedAnswer.tiles[i].x;
+        const yMatch = selectedTiles[i].y === matchedAnswer.tiles[i].y;
+
+        if (!xMatch || !yMatch) {
+          break;
+        }
+      }
+      
+      setAnswersFound([...answersFound, matchedAnswer]);
+      setUsedColors([...usedColors, color]);
+      setColors([...colors.slice(1), color]);
+    }
+
     setSelectedTiles([]);
     setSelecting(false);
   };
@@ -44,7 +66,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
         <h3>{puzzle.theme}</h3>
       </header>
 
-      <main className="Board" onMouseUp={() => stopSelecting()}>
+      <main className={styles.Board} onMouseUp={() => stopSelecting()}>
         {
           tiles.map((t, i) => (
             <BoardTile
@@ -61,13 +83,26 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
         }
 
         {
+          answersFound.map((a, i) => (
+            <BoardTileSelector
+              key={i}
+              puzzle={puzzle}
+              color={usedColors[i]}
+              firstTile={a.tiles[0]}
+              lastTile={a.tiles[a.tiles.length - 1]} />
+          ))
+        }
+
+        {
           isSelecting &&
             <BoardTileSelector
                 puzzle={puzzle}
+                color={color}
                 firstTile={selectedTiles[0]}
                 lastTile={selectedTiles[selectedTiles.length - 1]} />
         }
       </main>
+      <div>{answersFound.map(a => a.word).join(', ')}</div>
     </article>
   );
 }
