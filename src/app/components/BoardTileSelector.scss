@@ -1,0 +1,24 @@
+.Board__TileSelector {
+  box-sizing: content-box;
+  position: absolute;
+  mix-blend-mode: multiply;
+  border: 30px solid #ababab;
+  background: #ababab;
+  border-radius: 30px;
+  transform-origin: top left;
+  //transform: translate(-30px, -30px);
+  pointer-events: none;
+  //transition: width .2s, height .2s;
+
+  //&::after {
+  //  position: absolute;
+  //  top: 100%;
+  //  left: 0;
+  //  width: 5px;
+  //  height: 5px;
+  //  content: '';
+  //  background-color: #f0f;
+  //  border-radius: 50%;
+  //  transform: translate(-50%, -50%);
+  //}
+}
