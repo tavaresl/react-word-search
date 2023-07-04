@@ -1,4 +1,6 @@
 "use client";
+
+import styles from './page.module.scss'
 import Board from "@/components/Board";
 import Puzzle from "@/models/Puzzle";
 
@@ -66,7 +68,7 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className={styles.Home}>
       <div>
         <Board puzzle={puzzle} />
       </div>

@@ -9,12 +9,10 @@ type BoardTileProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivE
 export default function BoardTile({ selected, selectable, children, ...props }: BoardTileProps) {
     // const [classes, setClasses] = useState<string>('Board__Tile');
 
-    const classes: string = selected ? 'Board__Tile Board__Tile--Selected' : 'Board__Tile';
-
     return (
       <div
         { ...props }
-        className={ styles.Board__Tile }>
+        className={ `${props.className} ${styles.BoardTile}` }>
         { children }
       </div>
     );

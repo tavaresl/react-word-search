@@ -1,0 +1,12 @@
+.AnswerGrid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  .AnswerGrid__Answer {
+    list-style: none;
+    padding: 0;
+    flex: 0 0 calc(33.33% - 4px);
+  }
+}

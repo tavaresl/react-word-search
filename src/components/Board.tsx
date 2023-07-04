@@ -3,6 +3,9 @@ import BoardTile from "@/components/BoardTile";
 import Puzzle, {PuzzleAnswer, PuzzleTile} from "@/models/Puzzle";
 import {CSSProperties, useState} from "react";
 import BoardTileSelector, {HexadecimalColor} from "@/components/BoardTileSelector";
+import BoardHeader from "@/components/BoardHeader";
+import AnswersGrid from "@/components/AnswersGrid";
+import Answer from "@/components/Answer";
 
 export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const [isSelecting, setSelecting] = useState<boolean>(false);
@@ -13,7 +16,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   ]);
   const [usedColors, setUsedColors] = useState<HexadecimalColor[]>([]);
 
-  const tileStyle: CSSProperties = { flexBasis: `calc(${100 / puzzle.width}% - var(--gap))` };
+  const tileStyle: CSSProperties = { flexBasis: `${100 / puzzle.width}%` };
   const tiles = getSortedTiles(puzzle);
   const color = colors[0] as HexadecimalColor;
   const startSelecting = (initialTile: PuzzleTile) => {
@@ -61,10 +64,8 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   };
 
   return (
-    <article>
-      <header>
-        <h3>{puzzle.theme}</h3>
-      </header>
+    <article className={styles.BoardWrapper}>
+      <BoardHeader puzzle={puzzle} answersFound={answersFound} />
 
       <main className={styles.Board} onMouseUp={() => stopSelecting()}>
         {
@@ -72,6 +73,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
             <BoardTile
               key={i}
               tabIndex={i}
+              className={styles.Board__Tile}
               selectable={isSelecting}
               selected={selectedTiles.includes(t)}
               onPointerDown={() => startSelecting(t)}
@@ -102,7 +104,14 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
                 lastTile={selectedTiles[selectedTiles.length - 1]} />
         }
       </main>
-      <div>{answersFound.map(a => a.word).join(', ')}</div>
+      <AnswersGrid>
+        { answersFound.map((a, i) => (
+          <Answer
+            key={i}
+            answer={a}
+            color={usedColors[i]} />
+        ))}
+      </AnswersGrid>
     </article>
   );
 }
