@@ -7,7 +7,7 @@ type BoardAnswersGridProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, H
 
 export default function AnswersGrid({...props}: BoardAnswersGridProps) {
   return (
-    <aside className={style.AnswerGrid}>
+    <aside className={`${style.AnswerGrid} ${props.className || ''}`}>
       {props.children && props.children.map((child, i) => (
         <li key={i} className={style.AnswerGrid__Answer}>
           { child }

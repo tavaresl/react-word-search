@@ -1,3 +1,5 @@
+"use client";
+
 import styles from './Board.module.scss'
 import BoardTile from "@/components/BoardTile";
 import Puzzle, {PuzzleAnswer, PuzzleTile} from "@/models/Puzzle";
@@ -40,20 +42,28 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
     }
   };
 
+  const answerIsValid = (matchedAnswer: PuzzleAnswer): boolean => {
+    if (answersFound.includes(matchedAnswer)) {
+      return false;
+    }
+
+    for (let i = 0; i < selectedTiles.length; i++) {
+      const xMatch = selectedTiles[i].x === matchedAnswer.tiles[i].x;
+      const yMatch = selectedTiles[i].y === matchedAnswer.tiles[i].y;
+
+      if (!xMatch || !yMatch) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   const stopSelecting = () => {
     const selectedWord = selectedTiles.map(t => t.letter).join('');
     const matchedAnswer = puzzle.answers.find(a => a.word === selectedWord);
 
-    if (matchedAnswer && !answersFound.includes(matchedAnswer)) {
-      for (let i = 0; i < selectedTiles.length; i++) {
-        const xMatch = selectedTiles[i].x === matchedAnswer.tiles[i].x;
-        const yMatch = selectedTiles[i].y === matchedAnswer.tiles[i].y;
-
-        if (!xMatch || !yMatch) {
-          break;
-        }
-      }
-      
+    if (matchedAnswer && answerIsValid(matchedAnswer)) {
       setAnswersFound([...answersFound, matchedAnswer]);
       setUsedColors([...usedColors, color]);
       setColors([...colors.slice(1), color]);
@@ -64,10 +74,13 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   };
 
   return (
-    <article className={styles.BoardWrapper}>
-      <BoardHeader puzzle={puzzle} answersFound={answersFound} />
+    <article className={styles.Board}>
+      <BoardHeader className={styles.Board__Header} puzzle={puzzle} answersFound={answersFound} />
 
-      <main className={styles.Board} onMouseUp={() => stopSelecting()}>
+      <section
+        className={styles.Board__Grid}
+        style={{maxWidth: `calc(${puzzle.width} * var(--tile-max-size)`}}
+        onMouseUp={() => stopSelecting()}>
         {
           tiles.map((t, i) => (
             <BoardTile
@@ -103,8 +116,8 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
                 firstTile={selectedTiles[0]}
                 lastTile={selectedTiles[selectedTiles.length - 1]} />
         }
-      </main>
-      <AnswersGrid>
+      </section>
+      <AnswersGrid className={styles.Board__Footer}>
         { answersFound.map((a, i) => (
           <Answer
             key={i}

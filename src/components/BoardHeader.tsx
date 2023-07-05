@@ -1,6 +1,10 @@
 import Puzzle, {PuzzleAnswer} from "@/models/Puzzle";
 import styles from './BoardHeader.module.scss'
+import {DetailedHTMLProps, HTMLAttributes} from "react";
 
+type BoardHeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+  puzzle: Puzzle, answersFound: PuzzleAnswer[],
+}
 
 function ProgressBar({ value, maxValue }: { value: number, maxValue: number }) {
   const width = `${(100 * value) / maxValue}%`;
@@ -21,10 +25,10 @@ function ProgressBar({ value, maxValue }: { value: number, maxValue: number }) {
   );
 }
 
-export default function BoardHeader({ puzzle, answersFound }: { puzzle: Puzzle, answersFound: PuzzleAnswer[] }) {
+export default function BoardHeader({ puzzle, answersFound, ...props }: BoardHeaderProps) {
   return (
     <>
-      <header className={styles.Board__Header}>
+      <header className={`${styles.Board__Header} ${props.className || ''}`}>
         <h3>{puzzle.theme}</h3>
 
         <aside>

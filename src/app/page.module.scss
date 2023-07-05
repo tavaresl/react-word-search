@@ -1,6 +1,7 @@
 .Home {
   padding: 30px;
   margin: 0;
+  height: 100%;
 
   @media (min-width: 480px) { padding: 30px 5%; }
   @media (min-width: 560px) { padding: 30px 9%; }
@@ -10,4 +11,5 @@
   @media (min-width: 934px) { padding: 30px 25%; }
   @media (min-width: 1024px) { padding: 30px 30%; }
   @media (min-width: 1280px) { padding: 30px 35%; }
+  @media (min-width: 1620px) { padding: 30px 37.5%; }
 }

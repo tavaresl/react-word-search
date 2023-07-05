@@ -3,6 +3,8 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 6px;
+  height: 130px;
+  align-content: start;
 
   .AnswerGrid__Answer {
     list-style: none;

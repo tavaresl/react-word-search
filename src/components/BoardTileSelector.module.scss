@@ -4,7 +4,7 @@
   mix-blend-mode: multiply;
   border: 30px solid #ababab;
   background: #ababab;
-  border-radius: 30px;
+  border-radius: var(--tile-max-size);
   transform-origin: top left;
   pointer-events: none;
 }
