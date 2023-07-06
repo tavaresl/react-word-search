@@ -8,15 +8,19 @@ import BoardTileSelector, {HexadecimalColor} from "@/components/BoardTileSelecto
 import BoardHeader from "@/components/BoardHeader";
 import AnswersGrid from "@/components/AnswersGrid";
 import Answer from "@/components/Answer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppState} from "@/store/store";
+import gameStateSlice from "@/store/gameSlice";
 
 export default function Board({ puzzle }: { puzzle: Puzzle }) {
+  const dispatch = useDispatch();
+
   const [isSelecting, setSelecting] = useState<boolean>(false);
   const [selectedTiles, setSelectedTiles] = useState<PuzzleTile[]>([]);
-  const [answersFound, setAnswersFound] = useState<PuzzleAnswer[]>([]);
-  const [colors, setColors] = useState<HexadecimalColor[]>([
-    '#DBEBB7', '#C3EAEB', '#EADBAB', '#E6A9EB', '#EBB5A0',
-  ]);
-  const [usedColors, setUsedColors] = useState<HexadecimalColor[]>([]);
+
+  const answersFound = useSelector((state: AppState) => state.game.foundAnswers);
+  const usedColors = useSelector((state: AppState) => state.game.usedColors);
+  const colors = useSelector((state: AppState) => state.game.availableColors);
 
   const tileStyle: CSSProperties = { flexBasis: `${100 / puzzle.width}%` };
   const tiles = getSortedTiles(puzzle);
@@ -64,9 +68,8 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
     const matchedAnswer = puzzle.answers.find(a => a.word === selectedWord);
 
     if (matchedAnswer && answerIsValid(matchedAnswer)) {
-      setAnswersFound([...answersFound, matchedAnswer]);
-      setUsedColors([...usedColors, color]);
-      setColors([...colors.slice(1), color]);
+      dispatch(gameStateSlice.actions.addFoundAnswers(matchedAnswer));
+      dispatch(gameStateSlice.actions.useColor(color));
     }
 
     setSelectedTiles([]);

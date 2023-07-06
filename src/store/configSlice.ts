@@ -1,4 +1,4 @@
-import {createSlice } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AppState} from "@/store/store";
 
 export interface ConfigState {
@@ -6,19 +6,28 @@ export interface ConfigState {
 }
 
 const initialState: ConfigState = {
-  useDarkMode: false,
+  useDarkMode: true,
 };
-
-export const configSlice = createSlice({
+const configSlice = createSlice({
   name: "config",
   initialState,
   reducers: {
-    setConfig(state, action) {
+    restore(state) {
+      const rawConfig = localStorage.getItem('APP_CONFIG');
+
+      if (rawConfig === null) {
+        return;
+      }
+
+      const config = JSON.parse(rawConfig) as ConfigState;
+
+      state.useDarkMode = config.useDarkMode;
+    },
+    setDarkMode(state, action: PayloadAction<boolean>) {
       state.useDarkMode = action.payload;
+      localStorage.setItem('APP_CONFIG', JSON.stringify(state));
     },
   },
 });
 
-export const { setConfig } = configSlice.actions;
-export const selectConfig = (state: AppState) => state.config.useDarkMode;
-export default configSlice.reducer;
+export default configSlice;
