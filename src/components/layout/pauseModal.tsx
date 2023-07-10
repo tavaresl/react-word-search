@@ -9,7 +9,7 @@ import {
   useState
 } from "react";
 import {useDispatch, useSelector} from "react-redux";
-import styles from './pauseModal.module.scss';
+import styles from './modal.module.scss';
 import gameStateSlice from "@/store/gameSlice";
 import {AppState} from "@/store/store";
 import configSlice from "@/store/configSlice";
@@ -24,7 +24,7 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
   const dispatch = useDispatch();
   const config = useSelector((state: AppState) => state.config);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [classList, setClassList] = useState<(string|undefined)[]>([props.className, styles.PauseModal]);
+  const [classList, setClassList] = useState<(string|undefined)[]>([props.className, styles.Modal]);
 
   if (visible && !dialogRef.current?.open) {
     setClassList([...classList, styles.PauseModalVisible]);

@@ -1,4 +1,4 @@
-.PauseModal {
+.Modal {
   --anim-duration: .3s;
 
   display: flex;
@@ -20,7 +20,7 @@
     background: rgba(30, 30, 30, .25);
   }
 
-  &.PauseModalVisible {
+  &.ModalVisible {
     opacity: 1;
     transform: scale(1);
   }
