@@ -73,6 +73,8 @@ const gameStateSlice = createSlice({
       state.currentState = GameStates.Playing;
       state.previousState = GameStates.Playing;
       state.foundAnswers = [];
+      state.availableColors = ['#DBEBB7', '#C3EAEB', '#EADBAB', '#E6A9EB', '#EBB5A0'];
+      state.usedColors = [];
       localStorage.setItem('APP_STATE', JSON.stringify(state));
     },
   },
