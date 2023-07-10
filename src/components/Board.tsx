@@ -27,6 +27,11 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const tileStyle: CSSProperties = { flexBasis: `${100 / puzzle.width}%` };
   const tiles = getSortedTiles(puzzle);
   const color = colors[0] as HexadecimalColor;
+
+  if (foundAnswers.length === puzzle.answers.length) {
+    dispatch(gameStateSlice.actions.finish());
+  }
+
   const startSelecting = (initialTile: PuzzleTile) => {
     if (gameState !== GameStates.Playing) {
       return;
@@ -76,10 +81,6 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
     if (matchedAnswer && answerIsValid(matchedAnswer)) {
       dispatch(gameStateSlice.actions.addFoundAnswers(matchedAnswer));
       dispatch(gameStateSlice.actions.useColor(color));
-    }
-
-    if (foundAnswers.length === puzzle.answers.length) {
-      dispatch(gameStateSlice.actions.finish());
     }
 
     setSelectedTiles([]);
