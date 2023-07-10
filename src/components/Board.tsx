@@ -87,7 +87,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   };
 
   return (
-    <article className={styles.Board}>
+    <article className={styles.Board} onMouseLeave={() => stopSelecting()}>
       <BoardHeader className={styles.Board__Header} puzzle={puzzle} answersFound={foundAnswers} />
 
       <section
