@@ -11,7 +11,6 @@ export enum GameStates {
 }
 
 export interface GameState {
-  oldPlayer: boolean,
   currentState: GameStates,
   previousState: GameStates,
   foundAnswers: PuzzleAnswer[],
@@ -23,7 +22,6 @@ export interface GameState {
 const gameStateSlice = createSlice({
   name: 'game',
   initialState: {
-    oldPlayer: false,
     currentState: GameStates.Loading,
     previousState: GameStates.Loading,
     foundAnswers: [] as PuzzleAnswer[],
@@ -40,15 +38,10 @@ const gameStateSlice = createSlice({
 
       const previousState = JSON.parse(previousStateRaw) as GameState;
 
-      state.oldPlayer = previousState.oldPlayer;
       state.foundAnswers = [...previousState.foundAnswers];
       state.usedColors = [...previousState.usedColors]
       state.availableColors = [...previousState.availableColors];
       state.currentState = previousState.currentState;
-    },
-    markAsOldPlayer(state) {
-      state.oldPlayer = true;
-      localStorage.setItem('APP_STATE', JSON.stringify(state));
     },
     play(state) {
       state.previousState = state.currentState;
@@ -63,6 +56,10 @@ const gameStateSlice = createSlice({
       state.currentState = state.previousState;
       state.previousState = GameStates.Paused;
     },
+    finish(state) {
+      state.previousState = state.currentState;
+      state.currentState = GameStates.Over;
+    },
     addFoundAnswers(state, action: PayloadAction<PuzzleAnswer>) {
       state.foundAnswers = [...state.foundAnswers, action.payload];
       localStorage.setItem('APP_STATE', JSON.stringify(state));
@@ -73,7 +70,6 @@ const gameStateSlice = createSlice({
       localStorage.setItem('APP_STATE', JSON.stringify(state));
     },
     reset(state) {
-      state.oldPlayer = true;
       state.currentState = GameStates.Playing;
       state.previousState = GameStates.Playing;
       state.foundAnswers = [];

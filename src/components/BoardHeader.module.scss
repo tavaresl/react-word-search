@@ -2,13 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: #3a3a3a;
 
-  h3 {
+  h2 {
     margin: 0 0 20px;
-    font-size: 1.8em;
+    font-size: 1.7em;
   }
 
   .Counter {
+    font-size: 1.2em;
     text-align: center;
     margin: 0 0 10px;
   }

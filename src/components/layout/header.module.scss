@@ -1,3 +1,42 @@
 .Header {
+  position: sticky;
+  padding: 10px var(--layout-padding);
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  .Header__SkipToContent {
+    visibility: hidden;
+
+    &:focus {
+      visibility: visible;
+      pointer-events: auto;
+    }
+  }
+
+  .Header__AppTitle {
+    margin: 0;
+  }
+
+  .Header__PauseButton {
+    position: absolute;
+    top: 50%;
+    right: var(--layout-padding);
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+
+    background: none;
+    border: none;
+    border-radius: 50%;
+
+    &:hover, &:focus {
+      background: #ddd;
+    }
+
+    &:active {
+      background: #ababab;
+    }
+  }
 }

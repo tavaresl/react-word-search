@@ -10,7 +10,8 @@ import AnswersGrid from "@/components/AnswersGrid";
 import Answer from "@/components/Answer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppState} from "@/store/store";
-import gameStateSlice from "@/store/gameSlice";
+import gameStateSlice, {GameStates} from "@/store/gameSlice";
+import gameSlice from "@/store/gameSlice";
 
 export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const dispatch = useDispatch();
@@ -18,7 +19,8 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const [isSelecting, setSelecting] = useState<boolean>(false);
   const [selectedTiles, setSelectedTiles] = useState<PuzzleTile[]>([]);
 
-  const answersFound = useSelector((state: AppState) => state.game.foundAnswers);
+  const gameState = useSelector((state: AppState) => state.game.currentState);
+  const foundAnswers = useSelector((state: AppState) => state.game.foundAnswers);
   const usedColors = useSelector((state: AppState) => state.game.usedColors);
   const colors = useSelector((state: AppState) => state.game.availableColors);
 
@@ -26,6 +28,10 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const tiles = getSortedTiles(puzzle);
   const color = colors[0] as HexadecimalColor;
   const startSelecting = (initialTile: PuzzleTile) => {
+    if (gameState !== GameStates.Playing) {
+      return;
+    }
+
     if (!isSelecting) {
       setSelectedTiles([initialTile]);
       setSelecting(true);
@@ -47,7 +53,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   };
 
   const answerIsValid = (matchedAnswer: PuzzleAnswer): boolean => {
-    if (answersFound.includes(matchedAnswer)) {
+    if (foundAnswers.find(a => a.word === matchedAnswer.word) !== undefined) {
       return false;
     }
 
@@ -72,13 +78,17 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
       dispatch(gameStateSlice.actions.useColor(color));
     }
 
+    if (foundAnswers.length === puzzle.answers.length) {
+      dispatch(gameStateSlice.actions.finish());
+    }
+
     setSelectedTiles([]);
     setSelecting(false);
   };
 
   return (
     <article className={styles.Board}>
-      <BoardHeader className={styles.Board__Header} puzzle={puzzle} answersFound={answersFound} />
+      <BoardHeader className={styles.Board__Header} puzzle={puzzle} answersFound={foundAnswers} />
 
       <section
         className={styles.Board__Grid}
@@ -101,7 +111,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
         }
 
         {
-          answersFound.map((a, i) => (
+          foundAnswers.map((a, i) => (
             <BoardTileSelector
               key={i}
               puzzle={puzzle}
@@ -121,7 +131,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
         }
       </section>
       <AnswersGrid className={styles.Board__Footer}>
-        { answersFound.map((a, i) => (
+        { foundAnswers.map((a, i) => (
           <Answer
             key={i}
             answer={a}

@@ -29,7 +29,7 @@ export default function BoardHeader({ puzzle, answersFound, ...props }: BoardHea
   return (
     <>
       <header className={`${styles.Board__Header} ${props.className || ''}`}>
-        <h3>{puzzle.theme}</h3>
+        <h2>{puzzle.theme}</h2>
 
         <aside>
           <p className={styles.Counter}>{answersFound.length}/{puzzle.answers.length}</p>

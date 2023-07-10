@@ -1,4 +1,4 @@
-import styles from './page.module.scss'
+import styles from './index.module.scss'
 import Board from "@/components/Board";
 import Puzzle from "@/models/Puzzle";
 
@@ -71,8 +71,8 @@ export default function Home() {
   };
 
   return (
-    <main className={styles.Home}>
+    <section className={styles.Home}>
       <Board puzzle={puzzle} />
-    </main>
+    </section>
   )
 }
