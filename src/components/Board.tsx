@@ -3,7 +3,7 @@
 import styles from './Board.module.scss'
 import BoardTile from "@/components/BoardTile";
 import Puzzle, {PuzzleAnswer, PuzzleTile} from "@/models/Puzzle";
-import {CSSProperties, useState} from "react";
+import {CSSProperties, useEffect, useState} from "react";
 import BoardTileSelector, {HexadecimalColor} from "@/components/BoardTileSelector";
 import BoardHeader from "@/components/BoardHeader";
 import AnswersGrid from "@/components/AnswersGrid";
@@ -27,10 +27,6 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const tileStyle: CSSProperties = { flexBasis: `${100 / puzzle.width}%` };
   const tiles = getSortedTiles(puzzle);
   const color = colors[0] as HexadecimalColor;
-
-  if (foundAnswers.length === puzzle.answers.length) {
-    dispatch(gameStateSlice.actions.finish());
-  }
 
   const startSelecting = (initialTile: PuzzleTile) => {
     if (gameState !== GameStates.Playing) {
@@ -86,6 +82,12 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
     setSelectedTiles([]);
     setSelecting(false);
   };
+
+  useEffect(() => {
+    if (foundAnswers.length === puzzle.answers.length) {
+      dispatch(gameStateSlice.actions.finish());
+    }
+  }, [foundAnswers, puzzle, dispatch]);
 
   return (
     <article className={styles.Board} onMouseLeave={() => stopSelecting()}>
