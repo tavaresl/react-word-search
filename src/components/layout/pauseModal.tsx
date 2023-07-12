@@ -27,7 +27,7 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
   const [classList, setClassList] = useState<(string|undefined)[]>([props.className, styles.Modal]);
 
   if (visible && !dialogRef.current?.open) {
-    setClassList([...classList, styles.PauseModalVisible]);
+    setClassList([...classList, styles.ModalVisible]);
     dialogRef.current?.showModal();
   }
 
@@ -36,7 +36,7 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
   };
 
   const handleTransitionEnd = (evt: TransitionEvent<HTMLDialogElement>) => {
-    if (!classList.includes(styles.PauseModalVisible)) {
+    if (!classList.includes(styles.ModalVisible)) {
       dialogRef.current?.close();
     }
   };
@@ -49,17 +49,17 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
     evt.preventDefault();
 
     if (dialogRef.current?.open) {
-      setClassList(classList.filter(c => c !== styles.PauseModalVisible));
+      setClassList(classList.filter(c => c !== styles.ModalVisible));
     }
   };
 
   const handleCloseButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
-    setClassList(classList.filter(c => c !== styles.PauseModalVisible));
+    setClassList(classList.filter(c => c !== styles.ModalVisible));
   };
 
   const handleRestartButton = (evt: MouseEvent<HTMLButtonElement>) => {
     dispatch(gameStateSlice.actions.reset());
-    setClassList(classList.filter(c => c !== styles.PauseModalVisible));
+    setClassList(classList.filter(c => c !== styles.ModalVisible));
   };
 
   return (
