@@ -1,6 +1,6 @@
 import {BoardTileSelectorProps} from "@/components/BoardTileSelector";
 import {CSSProperties} from "react";
-import {PuzzleTile} from "@/models/Puzzle";
+import {Tile} from "@/models/Puzzle";
 import {Property} from "csstype";
 import styles from "@/components/BoardTileSelector.module.scss";
 
@@ -24,7 +24,7 @@ export default function DiagonalTileSelector({ firstTile, lastTile, puzzle, colo
   )
 }
 
-const getRotationDeg = (firstTile: PuzzleTile, lastTile: PuzzleTile) => {
+const getRotationDeg = (firstTile: Tile, lastTile: Tile) => {
   const dx = lastTile.x - firstTile.x;
   const dy = lastTile.y - firstTile.y;
   if (dx > 0 && dy > 0) {
@@ -38,7 +38,7 @@ const getRotationDeg = (firstTile: PuzzleTile, lastTile: PuzzleTile) => {
   }
 }
 
-const getTransformOriginPoint = (firstTile: PuzzleTile, lastTile: PuzzleTile):  Property.TransformOrigin<string | number> => {
+const getTransformOriginPoint = (firstTile: Tile, lastTile: Tile):  Property.TransformOrigin<string | number> => {
   const dx = lastTile.x - firstTile.x;
   const dy = lastTile.y - firstTile.y;
 

@@ -1,9 +1,9 @@
-import Puzzle, {PuzzleAnswer} from "@/models/Puzzle";
+import Puzzle, {Answer, AnswerFound} from "@/models/Puzzle";
 import styles from './BoardHeader.module.scss'
 import {DetailedHTMLProps, HTMLAttributes} from "react";
 
 type BoardHeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-  puzzle: Puzzle, answersFound: PuzzleAnswer[],
+  puzzle: Puzzle, answersFound: AnswerFound[],
 }
 
 function ProgressBar({ value, maxValue }: { value: number, maxValue: number }) {

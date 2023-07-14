@@ -1,4 +1,4 @@
-import Puzzle, {PuzzleTile} from "@/models/Puzzle";
+import Puzzle, {Tile} from "@/models/Puzzle";
 import {CSSProperties} from "react";
 import {BoardTileSelectorProps} from "@/components/BoardTileSelector";
 import styles from "@/components/BoardTileSelector.module.scss";

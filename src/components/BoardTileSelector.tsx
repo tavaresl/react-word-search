@@ -1,6 +1,6 @@
 import './BoardTileSelector.module.scss';
 import {DetailedHTMLProps, HTMLAttributes} from "react";
-import Puzzle, {PuzzleTile} from "@/models/Puzzle";
+import Puzzle, {Tile} from "@/models/Puzzle";
 import HorizontalTileSelector from "@/components/HorizontalTileSelector";
 import VerticalTileSelector from "@/components/VerticalTileSelector";
 import DiagonalTileSelector from "@/components/DiagonalTileSelector";
@@ -10,8 +10,8 @@ export type HexadecimalColor = `#${string}`;
 
 export type BoardTileSelectorProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
   puzzle: Puzzle,
-  firstTile: PuzzleTile,
-  lastTile: PuzzleTile,
+  firstTile: Tile,
+  lastTile: Tile,
   color: HexadecimalColor,
 }
 

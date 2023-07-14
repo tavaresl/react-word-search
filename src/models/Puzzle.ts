@@ -1,18 +1,25 @@
+import {HexadecimalColor} from "@/components/BoardTileSelector";
+
 export default interface Puzzle {
   theme: string;
   width: number;
   height: number;
-  answers: PuzzleAnswer[];
-  looseLetters: PuzzleTile[];
+  answers: Answer[];
+  looseLetters: Tile[];
 }
 
-export interface PuzzleAnswer {
+export interface Answer {
   word: string;
-  tiles: PuzzleTile[];
+  tiles: Tile[];
 }
 
-export interface PuzzleTile {
+export interface Tile {
   x: number;
   y: number;
   letter: string;
+}
+
+export interface AnswerFound {
+  answer: Answer,
+  color: HexadecimalColor,
 }

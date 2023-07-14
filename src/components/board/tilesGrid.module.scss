@@ -1,0 +1,10 @@
+.TilesGrid {
+  --tile-max-size: 80px;
+  position: relative;
+  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  cursor: pointer;
+  min-height: 0;
+}

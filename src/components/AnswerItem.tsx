@@ -1,8 +1,8 @@
 import style from './Answer.module.scss';
-import {PuzzleAnswer} from "@/models/Puzzle";
+import {Answer} from "@/models/Puzzle";
 import {HexadecimalColor} from "@/components/BoardTileSelector";
 
-export default function Answer({ answer, color, ...props }: { answer: PuzzleAnswer, color: HexadecimalColor }) {
+export default function AnswerItem({ answer, color, ...props }: { answer: Answer, color: HexadecimalColor }) {
   return (
     <p
       className={style.Answer}

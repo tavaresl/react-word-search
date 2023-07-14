@@ -1,6 +1,6 @@
 import styles from './BoardTileSelector.module.scss';
 import {CSSProperties} from "react";
-import Puzzle, {PuzzleTile} from "@/models/Puzzle";
+import Puzzle, {Tile} from "@/models/Puzzle";
 import {BoardTileSelectorProps} from "@/components/BoardTileSelector";
 
 export default function HorizontalTileSelector({ firstTile, lastTile, puzzle, color }: BoardTileSelectorProps) {

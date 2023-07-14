@@ -3,17 +3,4 @@
   flex-direction: column;
   gap: 40px;
   align-items: center;
-
-  .Board__Grid {
-    --tile-max-size: 80px;
-    position: relative;
-    width: fit-content;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    cursor: pointer;
-    min-height: 0;
-
-    @media (min-width: 720px) {}
-  }
 }
