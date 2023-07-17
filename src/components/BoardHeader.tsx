@@ -4,10 +4,15 @@ import {DetailedHTMLProps, HTMLAttributes} from "react";
 
 type BoardHeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
   puzzle: Puzzle, answersFound: AnswerFound[],
-}
+};
 
-function ProgressBar({ value, maxValue }: { value: number, maxValue: number }) {
+type ProgressBarProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+  value: number, maxValue: number,
+};
+
+function ProgressBar({ value, maxValue, ...props }: ProgressBarProps) {
   const width = `${(100 * value) / maxValue}%`;
+  const classNames = [styles.ProgressBar, props.className].filter(c => Boolean(c)).join(' ');
 
   return (
     <div
@@ -15,7 +20,7 @@ function ProgressBar({ value, maxValue }: { value: number, maxValue: number }) {
       aria-valuemin={0}
       aria-valuemax={maxValue}
       aria-valuenow={value}
-      className={styles.ProgressBar}>
+      className={classNames}>
 
       <div
         role="presentation"
@@ -26,16 +31,18 @@ function ProgressBar({ value, maxValue }: { value: number, maxValue: number }) {
 }
 
 export default function BoardHeader({ puzzle, answersFound, ...props }: BoardHeaderProps) {
-  return (
-    <>
-      <header className={`${styles.Board__Header} ${props.className || ''}`}>
-        <h2>{puzzle.theme}</h2>
+  const classNames = [styles.BoardHeader, props.className].filter(c => Boolean(c)).join(' ');
 
-        <aside>
-          <p className={styles.Counter}>{answersFound.length}/{puzzle.answers.length}</p>
-          <ProgressBar value={answersFound.length} maxValue={puzzle.answers.length} />
-        </aside>
-      </header>
-    </>
+  return (
+    <header className={classNames}>
+      {puzzle.theme &&
+        <h2>{puzzle.theme}</h2>
+      }
+
+      <aside className={styles.BoardHeader__Counter}>
+        <p className={styles.Counter}>{answersFound.length}/{puzzle.answers.length}</p>
+        <ProgressBar value={answersFound.length} maxValue={puzzle.answers.length} />
+      </aside>
+    </header>
   )
 }
