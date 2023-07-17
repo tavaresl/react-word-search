@@ -1,0 +1,25 @@
+.AnswerItem {
+  --default-bg-color: #ececec;
+
+  padding: 8px 16px;
+  margin: 0;
+  border-radius: 4px;
+  font-size: 1.4em;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  will-change: transform, background-color;
+  transition: background-color .2s ease-in-out;
+  color: #6b6b6b;
+
+  &.AnswerItem--Found {
+    color: #444;
+    animation: .4s pulse;
+  }
+}
+
+@keyframes pulse {
+    0% { animation-timing-function: ease-out; transform: translate(0, 0) }
+   50% { transform: translate(0, -10px) }
+  100% { animation-timing-function: ease-in; transform: translate(0, 0) }
+}

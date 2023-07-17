@@ -42,11 +42,19 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
         availableColors={colors} />
 
       <AnswersGrid>
-        { foundAnswers.map(({ answer, color }, i) => (
-          <AnswerItem
-            key={i}
-            answer={answer}
-            color={color} />
+        { puzzle.answers.map((a, i) => foundAnswers.some(fa => fa.answer.word === a.word)
+          ? (
+            <AnswerItem
+              key={i}
+              answer={a}
+              found={true}
+              color={foundAnswers[foundAnswers.findIndex(fa => fa.answer.word === a.word)].color} />
+            )
+          : (
+            <AnswerItem
+              key={i}
+              found={false}
+              answer={a} />
         ))}
       </AnswersGrid>
     </article>
