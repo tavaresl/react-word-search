@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
   align-items: stretch;
 
   h2 {
@@ -23,26 +22,5 @@
       text-align: center;
       margin: 0 0 10px;
     }
-  }
-}
-
-.ProgressBar {
-  height: 30px;
-  width: 100%;
-  overflow: hidden;
-  background-color: #ececec;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 4px;
-  border-radius: 20px;
-
-  .ProgressBar__Bar {
-    background-color: #B6C6F0;
-    height: 100%;
-    border-radius: 20px;
-    will-change: width;
-    transition: width .2s;
   }
 }

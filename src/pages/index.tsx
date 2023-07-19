@@ -2,9 +2,12 @@ import styles from './index.module.scss'
 import Board from "@/components/Board";
 import Puzzle from "@/models/Puzzle";
 import GameOverModal from "@/components/layout/gameOverModal";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppState} from "@/store/store";
 import {GameStates} from "@/store/gameSlice";
+import App from "next/app";
+import {useEffect} from "react";
+import puzzleSlice, {getRandom} from "@/store/puzzleState";
 
 export const metadata = {
   title: 'React Word Search',
@@ -13,73 +16,12 @@ export const metadata = {
 
 export default function Home() {
   const gameState = useSelector((appState: AppState) => appState.game.currentState);
-
-  const puzzle: Puzzle = {
-    theme: 'Xmas',
-    width: 5,
-    height: 6,
-    answers: [
-      {
-        word: 'santa',
-        tiles: [
-          { letter: 's', x: 0, y: 0 },
-          { letter: 'a', x: 1, y: 1 },
-          { letter: 'n', x: 2, y: 2 },
-          { letter: 't', x: 3, y: 3 },
-          { letter: 'a', x: 4, y: 4 },
-        ],
-      },
-      {
-        word: 'gift',
-        tiles: [
-          { letter: 'g', x: 3, y: 0 },
-          { letter: 'i', x: 3, y: 1 },
-          { letter: 'f', x: 3, y: 2 },
-          { letter: 't', x: 3, y: 3 },
-        ],
-      },
-      {
-        word: 'sled',
-        tiles: [
-          { letter: 's', x: 0, y: 0 },
-          { letter: 'l', x: 0, y: 1 },
-          { letter: 'e', x: 0, y: 2 },
-          { letter: 'd', x: 0, y: 3 },
-        ],
-      },
-      {
-        word: 'snow',
-        tiles: [
-          { letter: 's', x: 0, y: 5 },
-          { letter: 'n', x: 1, y: 5 },
-          { letter: 'o', x: 2, y: 5 },
-          { letter: 'w', x: 3, y: 5 },
-        ],
-      },
-    ],
-    looseLetters: [
-      { letter: 'b', x: 1, y: 0 },
-      { letter: 'c', x: 2, y: 0 },
-      { letter: 'j', x: 4, y: 0 },
-      { letter: 'w', x: 2, y: 1 },
-      { letter: 'u', x: 4, y: 1 },
-      { letter: 'v', x: 1, y: 2 },
-      { letter: 'n', x: 4, y: 2 },
-      { letter: 'p', x: 1, y: 3 },
-      { letter: 'q', x: 2, y: 3 },
-      { letter: 'd', x: 4, y: 3 },
-      { letter: 'z', x: 0, y: 4 },
-      { letter: 'k', x: 1, y: 4 },
-      { letter: 'i', x: 2, y: 4 },
-      { letter: 'y', x: 3, y: 4 },
-      { letter: 'r', x: 4, y: 5 },
-    ],
-  };
+  const puzzle = useSelector((appState: AppState) => appState.puzzle.puzzle) as Puzzle;
 
   return (
     <section className={styles.Home}>
       <Board puzzle={puzzle} />
       <GameOverModal visible={gameState === GameStates.Over} />
     </section>
-  )
+  );
 }

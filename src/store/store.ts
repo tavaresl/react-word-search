@@ -3,11 +3,13 @@ import configSlice from "./configSlice";
 import gameSlice from "./gameSlice";
 
 import {createWrapper} from "next-redux-wrapper";
+import puzzleSlice from "@/store/puzzleState";
 
 const makeStore = () => configureStore({
   reducer: {
     [configSlice.name]: configSlice.reducer,
     [gameSlice.name]: gameSlice.reducer,
+    [puzzleSlice.name]: puzzleSlice.reducer,
   },
   devTools: true,
 });

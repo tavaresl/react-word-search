@@ -32,6 +32,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
     <article className={styles.Board}>
       <BoardHeader
         puzzle={puzzle}
+        className={styles.Board__Header}
         answersFound={foundAnswers} />
 
       <TilesGrid

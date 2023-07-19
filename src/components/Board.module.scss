@@ -1,6 +1,11 @@
 .Board {
   display: flex;
   flex-direction: column;
+  width: fit-content;
   gap: 40px;
   align-items: center;
+
+  .Board__Header {
+    align-self: stretch;
+  }
 }

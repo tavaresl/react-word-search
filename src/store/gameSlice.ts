@@ -42,12 +42,10 @@ const gameStateSlice = createSlice({
       state.answersFound = [...previousState.answersFound];
       state.usedColors = [...previousState.usedColors]
       state.availableColors = [...previousState.availableColors];
-      state.currentState = previousState.currentState;
     },
     play(state) {
       state.previousState = state.currentState;
       state.currentState = GameStates.Playing;
-      localStorage.setItem('APP_STATE', JSON.stringify(state));
     },
     pause(state) {
       state.previousState = state.currentState;
