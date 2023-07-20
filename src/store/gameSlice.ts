@@ -59,6 +59,10 @@ const gameStateSlice = createSlice({
       state.previousState = state.currentState;
       state.currentState = GameStates.Over;
     },
+    reload(state) {
+      state.previousState = state.currentState;
+      state.currentState = GameStates.Loading;
+    },
     addAnswerFound(state, action: PayloadAction<AnswerFound>) {
       state.answersFound = [...state.answersFound, action.payload];
       state.availableColors = state.availableColors.filter(c => c !== action.payload.color);

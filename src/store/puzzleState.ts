@@ -22,7 +22,7 @@ export const getRandom = createAsyncThunk('puzzle/getRandom', async (thunkAPI) =
     const newPuzzle = await response.json() as Puzzle;
 
     console.info('Puzzle fetched from remote server');
-    // localStorage.setItem('APP_PUZZLE', JSON.stringify(newPuzzle));
+    localStorage.setItem('APP_PUZZLE', JSON.stringify(newPuzzle));
 
     return newPuzzle;
   } catch (err) {
@@ -33,7 +33,12 @@ export const getRandom = createAsyncThunk('puzzle/getRandom', async (thunkAPI) =
 const puzzleSlice = createSlice({
   name: 'puzzle',
   initialState,
-  reducers: {},
+  reducers: {
+    clear(state) {
+      localStorage.removeItem('APP_PUZZLE');
+      state.puzzle = undefined;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getRandom.fulfilled, (state, action) => {
       state.puzzle = action.payload;

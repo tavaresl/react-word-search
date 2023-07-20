@@ -10,9 +10,10 @@ import {
 } from "react";
 import styles from './modal.module.scss';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faClose, faRotateLeft} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import gameStateSlice from "@/store/gameSlice";
 import {useDispatch} from "react-redux";
+import puzzleSlice, {getRandom} from "@/store/puzzleState";
 
 type GameOverModalProps = DetailedHTMLProps<HTMLAttributes<HTMLDialogElement>, HTMLDialogElement> & {
   visible: boolean;
@@ -20,7 +21,7 @@ type GameOverModalProps = DetailedHTMLProps<HTMLAttributes<HTMLDialogElement>, H
 
 export default function GameOverModal({ visible, ...props }: GameOverModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const [classList, setClassList] = useState([styles.Modal]);
 
   if (visible && !modalRef.current?.open) {
@@ -46,8 +47,10 @@ export default function GameOverModal({ visible, ...props }: GameOverModalProps)
     }
   };
 
-  const handleRestartButton = (evt: MouseEvent<HTMLButtonElement>) => {
+  const handleNextButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
     dispatch(gameStateSlice.actions.reset());
+    dispatch(puzzleSlice.actions.clear());
+    dispatch(gameStateSlice.actions.reload());
     setClassList(classList.filter(c => c !== styles.ModalVisible));
   };
 
@@ -61,8 +64,8 @@ export default function GameOverModal({ visible, ...props }: GameOverModalProps)
 
       <p>You completed the puzzle!</p>
 
-      <button className={styles.RestartButton} onClick={handleRestartButton}>
-        <FontAwesomeIcon icon={faRotateLeft} /> Restart
+      <button className={styles.NextButton} onClick={handleNextButtonClick}>
+        <FontAwesomeIcon icon={faArrowRight} /> Next
       </button>
     </dialog>
   );

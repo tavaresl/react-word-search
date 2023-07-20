@@ -2,12 +2,9 @@ import styles from './index.module.scss'
 import Board from "@/components/Board";
 import Puzzle from "@/models/Puzzle";
 import GameOverModal from "@/components/layout/gameOverModal";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {AppState} from "@/store/store";
 import {GameStates} from "@/store/gameSlice";
-import App from "next/app";
-import {useEffect} from "react";
-import puzzleSlice, {getRandom} from "@/store/puzzleState";
 
 export const metadata = {
   title: 'React Word Search',
