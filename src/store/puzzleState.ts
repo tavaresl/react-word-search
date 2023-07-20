@@ -10,12 +10,24 @@ const initialState: PuzzleState = {
 };
 
 export const getRandom = createAsyncThunk('puzzle/getRandom', async (thunkAPI) => {
-  const response = await fetch('/api/puzzle/random');
-  const puzzle= await response.json() as Puzzle;
+  const storedPuzzle= localStorage.getItem('APP_PUZZLE');
 
-  localStorage.setItem('APP_PUZZLE', JSON.stringify(puzzle));
+  if (storedPuzzle !== null) {
+    console.info('Puzzle restored from cache');
+    return JSON.parse(storedPuzzle) as Puzzle;
+  }
 
-  return puzzle;
+  try {
+    const response = await fetch('/api/puzzle/random');
+    const newPuzzle = await response.json() as Puzzle;
+
+    console.info('Puzzle fetched from remote server');
+    // localStorage.setItem('APP_PUZZLE', JSON.stringify(newPuzzle));
+
+    return newPuzzle;
+  } catch (err) {
+    console.warn('No puzzle available on remote server.')
+  }
 });
 
 const puzzleSlice = createSlice({
