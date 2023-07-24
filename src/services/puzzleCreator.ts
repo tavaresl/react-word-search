@@ -6,7 +6,13 @@ import Puzzle, { Answer, Tile } from "@/models/Puzzle";
 enum Direction {
   Horizontal,
   Vertical,
-  Diagonal,
+  Descending,
+  Ascending,
+}
+
+enum Sense {
+  Forward,
+  Backward,
 }
 
 const getWords = (() => {
@@ -89,25 +95,24 @@ function getRandomSpots(amount: number) {
 
   while (spots.length < amount) {
     const size = randomInt(3, 7);
-    const directions = [ Direction.Diagonal, Direction.Vertical, Direction.Horizontal];
-    const direction = directions[randomInt(3)];
+    const directions = [Direction.Descending, Direction.Ascending, Direction.Vertical, Direction.Horizontal];
+    const senses = [Sense.Forward, Sense.Backward];
+    const direction = directions[randomInt(directions.length)];
+    const sense = senses[randomInt(senses.length)];
 
-    const firstTileX = size < 6 ? randomInt(6 - size) : 0;
-    const firstTileY = size < 6 ? randomInt(6 - size) : 0;
+    const xMultiplier = getXMultiplier(sense, direction);
+    const yMultiplier = getYMultiplier(sense, direction);
+
+    const firstTileX = getFirstTileX(size, sense, direction);
+    const firstTileY = getFirstTileY(size, sense, direction);
 
     const tiles = new Array<Tile>(size)
       .fill({ letter: "", x: -1, y: -1 })
-      .map((_, i) => i === 0
-        ? {
+      .map((_, i) => ({
           letter: '',
-          x: firstTileX,
-          y: firstTileY,
-        }
-        : {
-          letter: '',
-          x: direction === Direction.Vertical ? firstTileX : firstTileX + i,
-          y: direction === Direction.Horizontal ? firstTileY : firstTileY + i,
-        }
+          x: firstTileX + i * xMultiplier,
+          y: firstTileY + i * yMultiplier,
+        })
       );
 
     if (!spots.some(spot => spotsOverlap(spot, tiles))) {
@@ -122,4 +127,67 @@ function spotsOverlap(spot1: Tile[], spot2: Tile[]): boolean {
   const numOfOverlaps = spot2.reduce((sum, t2) => spot1.some(t1 => t1.x === t2.x && t1.y === t2.y) ? sum + 1 : sum, 0);
 
   return numOfOverlaps > 1;
+}
+
+function getXMultiplier(sense: Sense, direction: Direction): -1 | 0 | 1 {
+  switch (direction) {
+    case Direction.Horizontal:
+      return sense === Sense.Forward ? 1 : -1;
+    case Direction.Vertical:
+      return 0;
+    case Direction.Ascending:
+      return sense === Sense.Forward ? 1 : -1;
+    case Direction.Descending:
+      return sense === Sense.Forward ? 1 : -1;
+  }
+}
+
+function getYMultiplier(sense: Sense, direction: Direction): -1 | 0 | 1 {
+  switch (direction) {
+    case Direction.Horizontal:
+      return 0;
+    case Direction.Vertical:
+      return sense === Sense.Forward ? 1 : -1;
+    case Direction.Ascending:
+      return sense === Sense.Forward ? -1 : 1;
+    case Direction.Descending:
+      return sense === Sense.Forward ? 1 : -1;
+  }
+}
+
+function getFirstTileX(size: number, sense: Sense, direction: Direction): number {
+  if (direction === Direction.Vertical) {
+    return randomInt(6);
+  }
+
+  if (sense === Sense.Forward) {
+    return size < 6 ? randomInt(6 - size) : 0; 
+  } else {
+    return size < 6 ? randomInt(size - 1, 6) : 5;
+  }
+}
+
+function getFirstTileY(size: number, sense: Sense, direction: Direction): number {
+  const backward = () => size < 6 ? randomInt(size - 1, 6) : 5;
+  const forward = () => size < 6 ? randomInt(6 - size) : 0;
+  
+  if (direction === Direction.Horizontal) {
+    return randomInt(6);
+  }
+
+  if (direction === Direction.Ascending) {
+    switch (sense) {
+      case Sense.Forward:
+        return backward();
+      
+      case Sense.Backward:
+        return forward();
+    }
+  }
+
+  if (sense === Sense.Forward) {
+    return forward();
+  } else {
+    return backward();
+  }
 }

@@ -5,6 +5,7 @@ import GameOverModal from "@/components/layout/gameOverModal";
 import {useSelector} from "react-redux";
 import {AppState} from "@/store/store";
 import {GameStates} from "@/store/gameSlice";
+import Head from 'next/head';
 
 export const metadata = {
   title: 'React Word Search',
@@ -16,9 +17,14 @@ export default function Home() {
   const puzzle = useSelector((appState: AppState) => appState.puzzle.puzzle) as Puzzle;
 
   return (
+    <>
+    <Head>
+      <title>Word Search | by Lukão Rocha</title>
+    </Head>
     <section className={styles.Home}>
       <Board puzzle={puzzle} />
       <GameOverModal visible={gameState === GameStates.Over} />
     </section>
+    </>
   );
 }
