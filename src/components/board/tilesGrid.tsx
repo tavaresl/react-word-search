@@ -142,7 +142,11 @@ function getSortedTiles(puzzle: Puzzle): Tile[] {
     return tiles;
   }, [] as Tile[])
 
-  return uniqueTiles.sort((a,b) => a.y === b.y ? a.x - b.x : a.y - b.y);
+  const sortedTiles = uniqueTiles.sort((a,b) => a.y === b.y ? a.x - b.x : a.y - b.y);
+  
+  console.log(sortedTiles);
+
+  return sortedTiles;
 }
 
 

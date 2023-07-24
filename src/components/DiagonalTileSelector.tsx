@@ -43,12 +43,12 @@ const getTransformOriginPoint = (firstTile: Tile, lastTile: Tile):  Property.Tra
   const dy = lastTile.y - firstTile.y;
 
   if (dx > 0 && dy > 0) {
-    return '50px -20px';
+    return '69px -28px';
   } else if (dx > 0 && dy < 0) {
-    return '-20px 50px';
+    return '-28px 69px';
   } else if (dx < 0 && dy > 0) {
-    return '22px 10px';
+    return '28px 12px';
   } else {
-    return '10px 22px';
+    return '12px 28px';
   }
 }

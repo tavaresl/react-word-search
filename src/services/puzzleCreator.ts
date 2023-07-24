@@ -29,14 +29,14 @@ const getWords = (() => {
 
 export async function createPuzzle(): Promise<Puzzle> {
   const words = await getWords();
-  const spots = getRandomSpots(5);
+  const spots = getRandomSpots(randomInt(4, 7));
   const answers = fillSpots(spots, words);
 
   const looseLetters: Tile[] = [];
   const usedTiles = answers.flatMap(a => a.tiles);
   const letters = 'abcdefghijklmnopqrstuvwxyz';
 
-  for (let x = 0; x < 5; x++) {
+  for (let x = 0; x < 6; x++) {
     for (let y = 0; y < 6; y++) {
       if (!usedTiles.some(t => t.x === x && t.y === y)) {
         looseLetters.push({ letter: letters[randomInt(letters.length)], x, y});
@@ -44,7 +44,7 @@ export async function createPuzzle(): Promise<Puzzle> {
     }
   }
   
-  return { theme: '', answers, looseLetters, width: 5, height: 6 };
+  return { theme: '', answers, looseLetters, width: 6, height: 6 };
 }
 
 function fillSpots(spotsAvailable: Array<Tile[]>, words: string[], filledSpots: Answer[] = [], wordsToAvoid: string[] = []): Answer[] {
@@ -88,17 +88,13 @@ function getRandomSpots(amount: number) {
   const spots: Array<Tile[]> = [];
 
   while (spots.length < amount) {
-    const size = randomInt(3, 6);
+    const size = randomInt(3, 7);
     const directions = [ Direction.Diagonal, Direction.Vertical, Direction.Horizontal];
-    const direction = directions[randomInt(size < 6 ? 2 : 1)];
+    const direction = directions[randomInt(3)];
 
-    const firstTileX = direction === Direction.Vertical ? randomInt(5)
-      : size < 5 ? randomInt(5 - size)
-        : 0;
+    const firstTileX = size < 6 ? randomInt(6 - size) : 0;
+    const firstTileY = size < 6 ? randomInt(6 - size) : 0;
 
-    const firstTileY = direction === Direction.Horizontal ? randomInt(6)
-      : size < 6 ? randomInt(6 - size)
-        : 0;
     const tiles = new Array<Tile>(size)
       .fill({ letter: "", x: -1, y: -1 })
       .map((_, i) => i === 0

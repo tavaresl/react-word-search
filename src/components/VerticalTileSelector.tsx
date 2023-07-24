@@ -9,8 +9,8 @@ export default function VerticalTileSelector({ firstTile, lastTile, puzzle, colo
   const style: CSSProperties = {
     borderColor: color,
     backgroundColor: color,
-    left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% ${sign} 30px)`,
-    top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% ${sign} 30px)`,
+    left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% ${sign} 40px)`,
+    top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% ${sign} 40px)`,
     width: '1px',
     height: `${(100 * Math.abs(dy)) / puzzle.height}%`,
     transform: `rotate(${dy < 0 ? 180 : 0}deg)`,
