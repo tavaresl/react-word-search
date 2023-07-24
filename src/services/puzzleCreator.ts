@@ -93,10 +93,21 @@ function fillSpots(spotsAvailable: Array<Tile[]>, words: string[], filledSpots: 
 function getRandomSpots(amount: number) {
   const spots: Array<Tile[]> = [];
 
+  const directionLimits = {
+    [Direction.Horizontal]: 2,
+    [Direction.Vertical]: 2,
+    [Direction.Ascending]: 1,
+    [Direction.Descending]: 1,
+  };
+  const senseLimits = {
+    [Sense.Backward]: 2,
+    [Sense.Forward]: 4,
+  };
+
   while (spots.length < amount) {
     const size = randomInt(3, 7);
-    const directions = [Direction.Descending, Direction.Ascending, Direction.Vertical, Direction.Horizontal];
-    const senses = [Sense.Forward, Sense.Backward];
+    const directions = [Direction.Descending, Direction.Ascending, Direction.Vertical, Direction.Horizontal].filter(d => directionLimits[d] > 0);
+    const senses = [Sense.Forward, Sense.Backward].filter(s => senseLimits[s] > 0);
     const direction = directions[randomInt(directions.length)];
     const sense = senses[randomInt(senses.length)];
 
@@ -116,6 +127,8 @@ function getRandomSpots(amount: number) {
       );
 
     if (!spots.some(spot => spotsOverlap(spot, tiles))) {
+      directionLimits[direction] -= 1;
+      senseLimits[sense] -= 1;
       spots.push(tiles);
     }
   }
