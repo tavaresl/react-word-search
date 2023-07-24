@@ -48,7 +48,6 @@ export default function GameOverModal({ visible, ...props }: GameOverModalProps)
   };
 
   const handleNextButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
-    dispatch(gameStateSlice.actions.reset());
     dispatch(puzzleSlice.actions.clear());
     dispatch(gameStateSlice.actions.reload());
     setClassList(classList.filter(c => c !== styles.ModalVisible));

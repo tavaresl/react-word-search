@@ -8,20 +8,28 @@ import {AppState} from "@/store/store";
 
 export default function Splash() {
   const dispatch = useDispatch<any>();
+  const isBooting = useSelector((appState: AppState) => appState.game.booting);
   const puzzle = useSelector((appState: AppState) => appState.puzzle.puzzle);
 
   useEffect(() => {
-    dispatch(configSlice.actions.restore());
-    dispatch(gameStateSlice.actions.restore());
-  }, []);
+    if (isBooting) {
+      dispatch(configSlice.actions.restore());
+      dispatch(gameStateSlice.actions.restore());
+    }
+  }, [isBooting]);
 
   useEffect(() => {
+    if (isBooting) {
+      return;
+    }
+
     if (puzzle === undefined) {
       dispatch(getRandom());
     } else {
       dispatch(gameStateSlice.actions.play());
     }
-  },[puzzle])
+  }, [isBooting, puzzle]);
+
 
   return (
     <article className={styles.Splash}>

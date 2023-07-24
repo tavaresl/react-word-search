@@ -16,6 +16,7 @@ export interface GameState {
   answersFound: AnswerFound[],
   usedColors: HexadecimalColor[],
   availableColors: HexadecimalColor[],
+  booting: boolean,
 }
 
 const initialState: GameState = {
@@ -24,6 +25,7 @@ const initialState: GameState = {
   answersFound: [] as AnswerFound[],
   usedColors: [] as HexadecimalColor[],
   availableColors: ['#DBEBB7', '#C3EAEB', '#EADBAB', '#E6A9EB', '#EBB5A0'] as HexadecimalColor[],
+  booting: true,
 };
 
 const gameStateSlice = createSlice({
@@ -31,6 +33,8 @@ const gameStateSlice = createSlice({
   initialState,
   reducers: {
     restore: (state) => {
+      state.booting = false;
+
       const previousStateRaw = localStorage.getItem('APP_STATE');
 
       if (previousStateRaw === null) {
@@ -62,6 +66,10 @@ const gameStateSlice = createSlice({
     reload(state) {
       state.previousState = state.currentState;
       state.currentState = GameStates.Loading;
+      state.answersFound = [];
+      state.availableColors = ['#DBEBB7', '#C3EAEB', '#EADBAB', '#E6A9EB', '#EBB5A0'];
+      state.usedColors = [];
+      localStorage.setItem('APP_STATE', JSON.stringify(state));
     },
     addAnswerFound(state, action: PayloadAction<AnswerFound>) {
       state.answersFound = [...state.answersFound, action.payload];
