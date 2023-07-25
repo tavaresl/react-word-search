@@ -1,4 +1,4 @@
-import {CSSProperties, DetailedHTMLProps, HTMLAttributes, useMemo, useState} from "react";
+import {CSSProperties, DetailedHTMLProps, HTMLAttributes, PointerEvent, useMemo, useRef, useState} from "react";
 import styles from "./tilesGrid.module.scss";
 import BoardTile from "@/components/BoardTile";
 import BoardTileSelector, {HexadecimalColor} from "@/components/BoardTileSelector";
@@ -23,19 +23,21 @@ export default function TilesGrid({
 }: BoardLetterGridProps) {
   const [isSelecting, setSelecting] = useState<boolean>(false);
   const [selectedTiles, setSelectedTiles] = useState<Tile[]>([]);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const tiles = useMemo(() => getSortedTiles(puzzle), [puzzle]);
   const color = availableColors[0];
-  const tileStyle: CSSProperties = { flexBasis: `${100 / puzzle.width}%` };
+  const tileStyle: CSSProperties = { flexBasis: `${100 / puzzle.width}%`, pointerEvents: 'none' };
 
-  const startSelecting = (initialTile: Tile) => {
+  const startSelecting = (evt: PointerEvent<HTMLElement>) => {
     if (!enabled) {
       return;
     }
 
     if (!isSelecting) {
-      setSelectedTiles([initialTile]);
+      const tile = getTileByOffset(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
       setSelecting(true);
+      setSelectedTiles([tile]);
     }
   };
 
@@ -69,34 +71,49 @@ export default function TilesGrid({
     return true;
   }
 
-  const handleMouseEnter = (tile: Tile) => {
+  const handlePointerMove = (evt: PointerEvent<HTMLElement>) => {
     if (!isSelecting) {
       return;
     }
 
-    const lastButOneTile = selectedTiles[selectedTiles.length - 2];
+    const tile = getTileByOffset(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
 
-    if (selectedTiles.includes(tile) && lastButOneTile === tile) {
-      setSelectedTiles(selectedTiles.slice(0, selectedTiles.length - 1));
+    if (selectedTiles.includes(tile)) {
+      setSelectedTiles(selectedTiles.slice(0, selectedTiles.indexOf(tile) + 1));
     } else if (isSequential(...selectedTiles, tile)) {
       setSelectedTiles([...selectedTiles, tile]);
     }
   };
 
+  const getTileByOffset = (offsetX: number, offsetY: number): Tile => {
+    const gridElement = gridRef.current as HTMLDivElement;
+    const gridWidth = Number.parseInt(window.getComputedStyle(gridElement).getPropertyValue('width').replace("px", ''));
+    const cellSize = gridWidth / puzzle.width;
+
+    const x = Math.floor(offsetX / cellSize);
+    const y = Math.floor(offsetY / cellSize);
+
+    return tiles.find(t => t.x === x && t.y === y) as Tile;
+  };
+
   return (
     <section
+      ref={gridRef}
       className={styles.TilesGrid}
       style={{maxWidth: `calc(${puzzle.width} * var(--tile-max-size)`}}
-      onPointerUp={() => stopSelecting()}>
+      onPointerUp={() => stopSelecting()}
+      onPointerLeave={() => stopSelecting()}
+      onPointerDown={(e) => startSelecting(e)}
+      onPointerMove={(e) => handlePointerMove(e)}>
       {
         tiles.map((t, i) => (
           <BoardTile
             key={i}
-            tabIndex={i}
+            tabIndex={1}
+            data-x={t.x}
+            data-y={t.y}
             selectable={isSelecting}
             selected={selectedTiles.includes(t)}
-            onPointerDown={() => startSelecting(t)}
-            onPointerEnter={() => handleMouseEnter(t) }
             style={tileStyle}>
             {t.letter}
           </BoardTile>
