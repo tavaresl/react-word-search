@@ -18,15 +18,25 @@ export const getRandom = createAsyncThunk('puzzle/getRandom', async (thunkAPI) =
   }
 
   try {
-    const response = await fetch('/api/puzzle/random');
-    const newPuzzle = await response.json() as Puzzle;
+    let attempt = 1;
 
-    console.info('Puzzle fetched from remote server');
-    localStorage.setItem('APP_PUZZLE', JSON.stringify(newPuzzle));
+    while (attempt <= 5) {
+      const response = await fetch('/api/puzzle/random');
 
-    return newPuzzle;
+      if (!response.ok) {
+        attempt += 1;
+        continue;
+      }
+  
+      const newPuzzle = await response.json() as Puzzle;
+      localStorage.setItem('APP_PUZZLE', JSON.stringify(newPuzzle));
+
+      return newPuzzle;
+    }
+
+    throw new Error('Could not find any puzzle.');
   } catch (err) {
-    console.warn('No puzzle available on remote server.')
+    console.warn(err);
   }
 });
 

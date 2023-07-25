@@ -48,18 +48,26 @@
     }
   }
 
-  .NextButton {
-    padding: 10px 20px;
-    border: none;
-    background: #ededed;
-    border-radius: 8px;
+  .Actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: stretch;
 
-    &:hover, &:focus {
-      background: #ddd;
-    }
+    .ActionButton {
+      padding: 10px 20px;
+      border: none;
+      background: #ededed;
+      border-radius: 8px;
+      flex: 1 1 0;
 
-    &:active {
-      background: #ababab;
-    }
+      &:hover, &:focus {
+        background: #ddd;
+      }
+
+      &:active {
+        background: #ababab;
+      }
+    } 
   }
 }

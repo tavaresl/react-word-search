@@ -7,7 +7,9 @@ import { createPuzzle } from '@/services/puzzleCreator';
 export default async function handle(req: NextApiRequest, res: NextApiResponse<Puzzle>) {
   const puzzle = await createPuzzle();
 
-  res
-    .status(constants.HTTP_STATUS_OK)
-    .json(puzzle);
+  if (puzzle === null) {
+    res.status(constants.HTTP_STATUS_NOT_FOUND).end();
+  } else {
+    res.status(constants.HTTP_STATUS_OK).json(puzzle); 
+  }
 }

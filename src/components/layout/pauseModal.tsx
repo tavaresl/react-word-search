@@ -14,7 +14,8 @@ import gameStateSlice from "@/store/gameSlice";
 import {AppState} from "@/store/store";
 import configSlice from "@/store/configSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faClose, faRotateLeft} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRight, faClose, faRotateLeft} from "@fortawesome/free-solid-svg-icons";
+import puzzleSlice from "@/store/puzzleState";
 
 type PauseModalProps = DetailedHTMLProps<HTMLAttributes<HTMLDialogElement>, HTMLDialogElement> & {
   visible: boolean;
@@ -62,6 +63,12 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
     setClassList(classList.filter(c => c !== styles.ModalVisible));
   };
 
+  const handleSkipButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    dispatch(puzzleSlice.actions.clear());
+    dispatch(gameStateSlice.actions.reload());
+    setClassList(classList.filter(c => c !== styles.ModalVisible));
+  };
+
   return (
     <dialog
       ref={dialogRef}
@@ -82,9 +89,15 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
         <label htmlFor="use-dark-mode-checkbox">Use dark mode</label>
       </form>
 
-      <button className={styles.RestartButton} onClick={handleRestartButton}>
-        <FontAwesomeIcon icon={faRotateLeft} /> Restart
-      </button>
+      <div className={styles.Actions}>
+        <button className={styles.ActionButton} onClick={handleRestartButton}>
+          <FontAwesomeIcon icon={faRotateLeft} /> Restart
+        </button>
+
+        <button className={styles.ActionButton} onClick={handleSkipButtonClick}>
+          <FontAwesomeIcon icon={faArrowRight} /> Skip
+        </button>
+      </div>
 
       <button className={styles.CloseButton} onClick={handleCloseButtonClick}>
         <FontAwesomeIcon icon={faClose} />

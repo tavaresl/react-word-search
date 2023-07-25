@@ -63,9 +63,11 @@ export default function GameOverModal({ visible, ...props }: GameOverModalProps)
 
       <p>You completed the puzzle!</p>
 
-      <button className={styles.NextButton} onClick={handleNextButtonClick}>
-        <FontAwesomeIcon icon={faArrowRight} /> Next
-      </button>
+      <div className={styles.Actions}>
+        <button className={styles.ActionButton} onClick={handleNextButtonClick}>
+          <FontAwesomeIcon icon={faArrowRight} /> Next
+        </button>
+      </div>
     </dialog>
   );
 }

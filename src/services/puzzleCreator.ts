@@ -33,10 +33,14 @@ const getWords = (() => {
   };
 })();
 
-export async function createPuzzle(): Promise<Puzzle> {
+export async function createPuzzle(): Promise<Puzzle | null> {
   const words = await getWords();
   const spots = getRandomSpots(randomInt(4, 7));
   const answers = fillSpots(spots, words);
+
+  if (answers.length === 0) {
+    return null;
+  }
 
   const looseLetters: Tile[] = [];
   const usedTiles = answers.flatMap(a => a.tiles);
