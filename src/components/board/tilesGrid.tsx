@@ -1,3 +1,4 @@
+import '@/extensions/string';
 import {CSSProperties, DetailedHTMLProps, HTMLAttributes, PointerEvent, useMemo, useRef, useState} from "react";
 import styles from "./tilesGrid.module.scss";
 import BoardTile from "@/components/BoardTile";
@@ -58,16 +59,20 @@ export default function TilesGrid({
       return false;
     }
 
-    for (let i = 0; i < selectedTiles.length; i++) {
-      const xMatch = selectedTiles[i].x === matchedAnswer.tiles[i].x;
-      const yMatch = selectedTiles[i].y === matchedAnswer.tiles[i].y;
-
-      if (!xMatch || !yMatch) {
-        return false;
+    const tilesMatch = (tiles: Tile[]) => {
+      for (let i = 0; i < selectedTiles.length; i++) {
+        const xMatch = selectedTiles[i].x === tiles[i].x;
+        const yMatch = selectedTiles[i].y === tiles[i].y;
+  
+        if (!xMatch || !yMatch) {
+          return false;
+        }
       }
-    }
+  
+      return true;
+    };
 
-    return true;
+    return tilesMatch(matchedAnswer.tiles) || isPalindrome(matchedAnswer.word) && tilesMatch([...matchedAnswer.tiles].reverse());
   };
 
   const handlePointerMove = (evt: PointerEvent<HTMLElement>) => {
@@ -122,6 +127,8 @@ export default function TilesGrid({
 
     return tilesInSequence;
   };
+
+  const isPalindrome = (word: string) => word.reverse() === word;
 
   return (
     <section
