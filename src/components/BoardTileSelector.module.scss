@@ -2,9 +2,11 @@
   box-sizing: content-box;
   position: absolute;
   mix-blend-mode: multiply;
-  border: calc(var(--tile-max-size) / 2 - .5px) solid #ababab;
+  border: calc(var(--tile-max-size) / 3 - .5px) solid #ababab;
   background: #ababab;
   border-radius: var(--tile-max-size);
   transform-origin: top left;
   pointer-events: none;
+
+  
 }

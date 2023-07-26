@@ -9,8 +9,8 @@ export default function HorizontalTileSelector({ firstTile, lastTile, puzzle, co
   const style: CSSProperties = {
     borderColor: color,
     backgroundColor: color,
-    left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% ${sign} 40px)`,
-    top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% ${sign} 40px)`,
+    left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% ${sign} calc(var(--tile-max-size) / 3))`,
+    top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% ${sign} calc(var(--tile-max-size) / 3))`,
     width: `${(100 * Math.abs(dx)) / puzzle.width}%`,
     height: '1px',
     transform: `rotate(${dx < 0 ? 180 : 0}deg)`,

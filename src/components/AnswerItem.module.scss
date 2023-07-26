@@ -4,7 +4,7 @@
   padding: 8px 16px;
   margin: 0;
   border-radius: 4px;
-  font-size: 1.4em;
+  font-size: 1.2em;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.1rem;
@@ -15,6 +15,10 @@
   &.AnswerItem--Found {
     color: #444;
     animation: .4s pulse;
+  }
+
+  @media (min-width: 480px) {
+    font-size: 1.4em;
   }
 }
 

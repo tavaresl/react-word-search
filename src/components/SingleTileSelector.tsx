@@ -6,8 +6,8 @@ export default function SingleTileSelector({ puzzle, firstTile, lastTile, color 
   const style: CSSProperties = {
     borderColor: color,
     backgroundColor: color,
-    left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% - 40px)`,
-    top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% - 40px)`,
+    left: `calc(${(100 * (firstTile.x * 2 + 1)) / (puzzle.width * 2)}% - calc(var(--tile-max-size) / 3))`,
+    top: `calc(${(100 * (firstTile.y * 2 + 1)) / (puzzle.height * 2)}% - calc(var(--tile-max-size) / 3))`,
     width: '1px',
     height: '1px',
   };
