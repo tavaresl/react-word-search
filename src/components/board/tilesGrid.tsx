@@ -53,7 +53,6 @@ export default function TilesGrid({
     setSelecting(false);
   };
 
-
   const answerIsValid = (matchedAnswer: Answer): boolean => {
     if (answersFound.find(a => a.answer.word === matchedAnswer.word) !== undefined) {
       return false;
@@ -69,7 +68,7 @@ export default function TilesGrid({
     }
 
     return true;
-  }
+  };
 
   const handlePointerMove = (evt: PointerEvent<HTMLElement>) => {
     if (!isSelecting) {
@@ -78,10 +77,14 @@ export default function TilesGrid({
 
     const tile = getTileByOffset(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
 
-    if (selectedTiles.includes(tile)) {
+    console.log(tile);
+
+    if (!tile) {
+      stopSelecting();
+    } else if (selectedTiles.includes(tile)) {
       setSelectedTiles(selectedTiles.slice(0, selectedTiles.indexOf(tile) + 1));
-    } else if (isSequential(...selectedTiles, tile)) {
-      setSelectedTiles([...selectedTiles, tile]);
+    } else if (tilesAreSequential(selectedTiles[0], tile)) {
+      setSelectedTiles([...getTilesInSequence(selectedTiles[0], tile)]);
     }
   };
 
@@ -94,6 +97,35 @@ export default function TilesGrid({
     const y = Math.floor(offsetY / cellSize);
 
     return tiles.find(t => t.x === x && t.y === y) as Tile;
+  };
+
+  const tilesAreSequential = (tile1: Tile, tile2: Tile): boolean => {
+    if (tile2.x === tile1.x || tile2.y === tile1.y) {
+      return true;
+    }
+  
+    return Math.abs(tile2.x - tile1.x) === Math.abs(tile2.y - tile1.y);
+  };
+
+  const getTilesInSequence = (firstTile: Tile, lastTile: Tile): Tile[] => {
+    const dX = lastTile.x - firstTile.x;
+    const dY = lastTile.y - firstTile.y;
+    const amount = Math.max(Math.abs(dX), Math.abs(dY)) + 1;
+    const tilesInSequence: Tile[] = [firstTile];
+    const nextX = () => dX > 0 ? firstTile.x + tilesInSequence.length : firstTile.x - tilesInSequence.length;
+    const nextY = () => dY > 0 ? firstTile.y + tilesInSequence.length : firstTile.y - tilesInSequence.length;
+
+    console.log('dx', dX);
+    console.log('dy', dY);
+
+    while (tilesInSequence.length < amount) {
+      const x = dX === 0 ? firstTile.x : nextX();
+      const y = dY === 0 ? firstTile.y : nextY();
+      
+      tilesInSequence.push(tiles.find(t => t.x === x && t.y === y) as Tile);
+    }
+
+    return tilesInSequence;
   };
 
   return (
@@ -143,8 +175,6 @@ export default function TilesGrid({
   );
 }
 
-
-
 function getSortedTiles(puzzle: Puzzle): Tile[] {
   const allTiles = [
     ...puzzle.looseLetters,
@@ -160,22 +190,4 @@ function getSortedTiles(puzzle: Puzzle): Tile[] {
   }, [] as Tile[])
 
   return uniqueTiles.sort((a,b) => a.y === b.y ? a.x - b.x : a.y - b.y);;
-}
-
-
-const isSequential = (...tiles: Tile[]) => {
-  if (tiles.length < 2) {
-    return false;
-  }
-
-  let diffX = tiles[1].x - tiles[0].x;
-  let diffY = tiles[1].y - tiles[0].y;
-
-  for (let i = 0; i < tiles.length - 1; i++) {
-    if (tiles[i + 1].x - tiles[i].x !== diffX || tiles[i + 1].y - tiles[i].y !== diffY) {
-      return false;
-    }
-  }
-
-  return true;
 }
