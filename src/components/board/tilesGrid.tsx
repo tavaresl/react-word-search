@@ -77,8 +77,6 @@ export default function TilesGrid({
 
     const tile = getTileByOffset(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
 
-    console.log(tile);
-
     if (!tile) {
       stopSelecting();
     } else if (selectedTiles.includes(tile)) {
@@ -114,9 +112,6 @@ export default function TilesGrid({
     const tilesInSequence: Tile[] = [firstTile];
     const nextX = () => dX > 0 ? firstTile.x + tilesInSequence.length : firstTile.x - tilesInSequence.length;
     const nextY = () => dY > 0 ? firstTile.y + tilesInSequence.length : firstTile.y - tilesInSequence.length;
-
-    console.log('dx', dX);
-    console.log('dy', dY);
 
     while (tilesInSequence.length < amount) {
       const x = dX === 0 ? firstTile.x : nextX();
