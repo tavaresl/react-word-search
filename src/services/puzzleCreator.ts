@@ -42,17 +42,7 @@ export async function createPuzzle(): Promise<Puzzle | null> {
     return null;
   }
 
-  const looseLetters: Tile[] = [];
-  const usedTiles = answers.flatMap(a => a.tiles);
-  const letters = 'abcdefghijklmnopqrstuvwxyz';
-
-  for (let x = 0; x < 6; x++) {
-    for (let y = 0; y < 6; y++) {
-      if (!usedTiles.some(t => t.x === x && t.y === y)) {
-        looseLetters.push({ letter: letters[randomInt(letters.length)], x, y});
-      }
-    }
-  }
+  const looseLetters = getLooseTiles(answers);
   
   return { theme: '', answers, looseLetters, width: 6, height: 6 };
 }
@@ -208,3 +198,86 @@ function getFirstTileY(size: number, sense: Sense, direction: Direction): number
     return backward();
   }
 }
+
+function getLooseTiles(answers: Answer[]) {
+  const areTheSameTiles = (tiles1: Tile[], tiles2: Tile[]) => tiles1.every((t1, i) => tiles2[i].x === t1.x && tiles2[i].y === t1.y);
+  const usedTiles = answers.flatMap(a => a.tiles);
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const unusedLetters = letters.split('').filter(l => !usedTiles.some(t => t.letter === l)).join('');
+
+  const looseTiles: Tile[] = fillLooseTilesRandomly(usedTiles, letters);
+
+  const tiles = [...usedTiles, ...looseTiles];
+
+  for (const answer of answers) {
+    const [firstLetter, nextLetter] = answer.word;
+    const tilesWithFirstLetter = tiles.filter(tile => tile.letter === firstLetter);
+
+    for (const tile of tilesWithFirstLetter) {
+      const adjacentTiles: Tile[] = getAdjacentTiles(tiles, tile, nextLetter);
+
+      for (const adjacentTile of adjacentTiles) {
+        const possibleTiles = getPossibleRepeatingTiles(adjacentTile, tile, answer, tiles);
+
+        if (possibleTiles.length < answer.tiles.length || areTheSameTiles(possibleTiles, answer.tiles)) {
+          continue;
+        }
+
+        if (possibleTiles.some((t,i) => t.letter !== answer.tiles[i].letter)) {
+          continue;
+        }
+
+        const changeableTiles = possibleTiles.filter(t => !usedTiles.some(ut => ut.x === t.x && ut.y === t.y));
+        const tileToChange = changeableTiles[randomInt(changeableTiles.length)];
+
+        tileToChange.letter = unusedLetters[randomInt(unusedLetters.length)] || letters[randomInt(letters.length)];
+      }
+    }
+  }
+
+  return looseTiles;
+}
+
+function fillLooseTilesRandomly(usedTiles: Tile[], letters: string) {
+  const looseTiles: Tile[] = [];
+
+  for (let x = 0; x < 6; x++) {
+    for (let y = 0; y < 6; y++) {
+      if (!usedTiles.some(t => t.x === x && t.y === y)) {
+        looseTiles.push({ letter: letters[randomInt(letters.length)], x, y });
+      }
+    }
+  }
+
+  return looseTiles;
+}
+
+function getPossibleRepeatingTiles(adjacentTile: Tile, tile: Tile, answer: Answer, tiles: Tile[]) {
+  const dX = adjacentTile.x - tile.x;
+  const dY = adjacentTile.y - tile.y;
+  const dLength = answer.word.length - 2;
+
+  const possibleTiles = [
+    tile,
+    adjacentTile,
+    ...Array(dLength)
+      .fill(undefined)
+      .map((_, i) => tiles.find(t => t.x === adjacentTile.x + dX * (i + 1) && t.y === adjacentTile.y + dY * (i + 1)))
+      .filter(t => t !== undefined) as Tile[],
+  ];
+  return possibleTiles;
+}
+
+function getAdjacentTiles(tiles: Tile[], tile: Tile, nextLetter: string): Tile[] {
+  return [
+    tiles.find(t => t.x === tile.x - 1 && t.y === tile.y - 1),
+    tiles.find(t => t.x === tile.x && t.y === tile.y - 1),
+    tiles.find(t => t.x === tile.x + 1 && t.y === tile.y - 1),
+    tiles.find(t => t.x === tile.x + 1 && t.y === tile.y),
+    tiles.find(t => t.x === tile.x + 1 && t.y === tile.y + 1),
+    tiles.find(t => t.x === tile.x && t.y === tile.y + 1),
+    tiles.find(t => t.x === tile.x - 1 && t.y === tile.y + 1),
+    tiles.find(t => t.x === tile.x - 1 && t.y === tile.y), // ⬅️
+  ].filter(t => t !== undefined && t.letter === nextLetter) as Tile[];
+}
+
