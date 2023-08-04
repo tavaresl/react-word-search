@@ -5,6 +5,7 @@ import configSlice from "@/store/configSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {getRandom} from "@/store/puzzleState";
 import {AppState} from "@/store/store";
+import ReactGA from 'react-ga4';
 
 export default function Splash() {
   const dispatch = useDispatch<any>();
@@ -26,6 +27,7 @@ export default function Splash() {
     if (puzzle === undefined) {
       dispatch(getRandom());
     } else {
+      ReactGA.event({ category: 'game', action: 'change-state', label: 'play', nonInteraction: false });
       dispatch(gameStateSlice.actions.play());
     }
   }, [isBooting, puzzle]);

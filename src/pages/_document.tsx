@@ -1,5 +1,11 @@
 import {Head, Html, Main, NextScript} from "next/document";
 
+declare global {
+  interface Window {
+    dataLayer: unknown[];
+  }
+}
+
 export default function Document() {
   return (
     <Html lang="en">

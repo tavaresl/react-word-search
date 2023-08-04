@@ -4,7 +4,7 @@ import styles from "./tilesGrid.module.scss";
 import BoardTile from "@/components/BoardTile";
 import BoardTileSelector, {HexadecimalColor} from "@/components/BoardTileSelector";
 import Puzzle, {Answer, AnswerFound, Tile} from "@/models/Puzzle";
-
+import ReactGA from 'react-ga4';
 
 type BoardLetterGridProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
   enabled: boolean,
@@ -37,17 +37,23 @@ export default function TilesGrid({
 
     if (!isSelecting) {
       const tile = getTileByOffset(evt.nativeEvent.offsetX, evt.nativeEvent.offsetY);
+      ReactGA.event({ category: 'puzzle', action: 'select-tiles', label: 'start-selecting'});
       setSelecting(true);
       setSelectedTiles([tile]);
     }
   };
 
   const stopSelecting = () => {
+    if (!isSelecting) {
+      return;
+    }
+
     const selectedWord = selectedTiles.map(t => t.letter).join('');
     const matchedAnswer = puzzle.answers.find(a => a.word === selectedWord);
 
     if (matchedAnswer && answerIsValid(matchedAnswer)) {
       onAnswerFound({ answer: matchedAnswer, color: color });
+      ReactGA.event({ category: 'puzzle', action: 'select-tiles', label: 'answer-found', nonInteraction: false });
     }
 
     setSelectedTiles([]);

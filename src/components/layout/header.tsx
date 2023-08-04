@@ -5,6 +5,7 @@ import {DetailedHTMLProps, HTMLAttributes} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPause} from "@fortawesome/free-solid-svg-icons";
 import gameStateSlice from "@/store/gameSlice";
+import ReactGA from 'react-ga4';
 
 type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
   contentHref: string,
@@ -13,7 +14,10 @@ type HeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElem
 export default function Header({...props}: HeaderProps) {
   const usingDarkMode = useSelector((state: AppState) => state.config.useDarkMode);
   const dispatch = useDispatch();
-  const onPauseButtonClicked = () => dispatch(gameStateSlice.actions.pause());
+  const onPauseButtonClicked = () => {
+    ReactGA.event({ category: 'game', action: 'change-state', label: 'pause', nonInteraction: false });
+    dispatch(gameStateSlice.actions.pause());
+  };
 
   return (
     <header className={[props.className, styles.Header].join(' ')}>

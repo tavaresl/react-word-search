@@ -20,7 +20,7 @@ export const getRandom = createAsyncThunk('puzzle/getRandom', async (thunkAPI) =
   try {
     let attempt = 1;
 
-    while (attempt <= 5) {
+    while (attempt <= 10) {
       const response = await fetch('/api/puzzle/random');
 
       if (!response.ok) {

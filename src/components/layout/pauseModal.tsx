@@ -16,6 +16,7 @@ import configSlice from "@/store/configSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight, faClose, faRotateLeft} from "@fortawesome/free-solid-svg-icons";
 import puzzleSlice from "@/store/puzzleState";
+import ReactGA from 'react-ga4';
 
 type PauseModalProps = DetailedHTMLProps<HTMLAttributes<HTMLDialogElement>, HTMLDialogElement> & {
   visible: boolean;
@@ -33,6 +34,7 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
   }
 
   const handleModalClose = (evt: SyntheticEvent<HTMLDialogElement, Event>) => {
+    ReactGA.event({ category: 'game', action: 'change-state', label: 'play', nonInteraction: false });
     dispatch(gameStateSlice.actions.resume());
   };
 
@@ -55,15 +57,18 @@ export default function PauseModal({ visible, ...props }: PauseModalProps) {
   };
 
   const handleCloseButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    ReactGA.event({ category: 'pause-modal', action: 'button-click', label: 'close-modal', nonInteraction: false });
     setClassList(classList.filter(c => c !== styles.ModalVisible));
   };
 
   const handleRestartButton = (evt: MouseEvent<HTMLButtonElement>) => {
+    ReactGA.event({ category: 'pause-modal', action: 'button-click', label: 'restart-puzzle', nonInteraction: false });
     dispatch(gameStateSlice.actions.reset());
     setClassList(classList.filter(c => c !== styles.ModalVisible));
   };
 
   const handleSkipButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    ReactGA.event({ category: 'pause-modal', action: 'button-click', label: 'skip-puzzle', nonInteraction: false });
     dispatch(puzzleSlice.actions.clear());
     dispatch(gameStateSlice.actions.reload());
     setClassList(classList.filter(c => c !== styles.ModalVisible));

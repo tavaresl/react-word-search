@@ -14,6 +14,7 @@ import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import gameStateSlice from "@/store/gameSlice";
 import {useDispatch} from "react-redux";
 import puzzleSlice, {getRandom} from "@/store/puzzleState";
+import ReactGA from 'react-ga4';
 
 type GameOverModalProps = DetailedHTMLProps<HTMLAttributes<HTMLDialogElement>, HTMLDialogElement> & {
   visible: boolean;
@@ -48,6 +49,7 @@ export default function GameOverModal({ visible, ...props }: GameOverModalProps)
   };
 
   const handleNextButtonClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    ReactGA.event({ category: 'game-over-modal', action: 'button-click', label: 'next-puzzle', nonInteraction: false });
     dispatch(puzzleSlice.actions.clear());
     dispatch(gameStateSlice.actions.reload());
     setClassList(classList.filter(c => c !== styles.ModalVisible));

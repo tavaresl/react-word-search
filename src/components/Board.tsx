@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppState} from "@/store/store";
 import gameStateSlice, {GameStates} from "@/store/gameSlice";
 import TilesGrid from "@/components/board/tilesGrid";
+import ReactGA from 'react-ga4';
 
 export default function Board({ puzzle }: { puzzle: Puzzle }) {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ export default function Board({ puzzle }: { puzzle: Puzzle }) {
 
   useEffect(() => {
     if (foundAnswers.length === puzzle.answers.length) {
+      ReactGA.event({ category: 'game', action: 'change-state', label: 'finish'});
       dispatch(gameStateSlice.actions.finish());
     }
   }, [foundAnswers, puzzle, dispatch]);

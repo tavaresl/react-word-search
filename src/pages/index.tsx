@@ -6,6 +6,8 @@ import {useSelector} from "react-redux";
 import {AppState} from "@/store/store";
 import {GameStates} from "@/store/gameSlice";
 import Head from 'next/head';
+import { useEffect } from 'react';
+import ReactGA from 'react-ga4';
 
 export const metadata = {
   title: 'React Word Search',
@@ -15,6 +17,8 @@ export const metadata = {
 export default function Home() {
   const gameState = useSelector((appState: AppState) => appState.game.currentState);
   const puzzle = useSelector((appState: AppState) => appState.puzzle.puzzle) as Puzzle;
+
+  useEffect(() => ReactGA.send({ hitType: 'pageview', page: '/', title: 'Home' }), []);
 
   return (
     <>
